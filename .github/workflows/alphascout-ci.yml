@@ -2,22 +2,32 @@ name: AlphaScout CI
 on:
   push:
   pull_request:
+
 jobs:
   build-test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version: ["3.10", "3.11", "3.12"]
+
+    permissions:
+      contents: read  # recommended by setup-python action
+
     steps:
+      - name: Check out repository
       - uses: actions/checkout@v4
+
+      # (Optional) quick visibility check — enable if you need to debug path/casing
+      # - name: Show repo tree (debug)
+      #   run: ls -la && echo && ls -la CI || true
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
           cache: pip
-          cache-dependency-path: |
-            CI/requirements-dev.txt     # <- tell setup-python what to hash
+          # IMPORTANT: single-line value (no block scalar / no inline comments)
+          cache-dependency-path: CI/requirements-dev.txt
 
       - name: Install dev dependencies
         run: |
