@@ -34,4 +34,3 @@ jobs:
         with:
           name: coverage-xml
           path: coverage.xml
-
